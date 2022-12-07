@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d1869fcdf365f3d41bf413f0a3aeae84, type: 3}
+  m_Name: BasicArabicaPlant
+  m_EditorClassIdentifier: 
+  nameString: Basic Arabica Plant
+  prefab: {fileID: 4695132995424214916, guid: 8f9a7f8fad81e09418ad167344d36a0d, type: 3}
+  visual: {fileID: 4695132995424214916, guid: 37cf6e0c64a106247b7e9166a871c925, type: 3}
+  xWidth: 1
+  zWidth: 1
