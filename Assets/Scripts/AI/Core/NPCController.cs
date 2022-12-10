@@ -49,7 +49,6 @@ namespace TL.Core
             FSMTick();
         }
 
-        //THIS IS ALL FUCKED. FIX IT
         public void FSMTick()
         {
             if (currentState == State.decide)
