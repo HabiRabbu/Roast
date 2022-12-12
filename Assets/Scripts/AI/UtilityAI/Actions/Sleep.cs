@@ -25,7 +25,7 @@ namespace TL.UtilityAI.Actions
             float distance = Mathf.Infinity;
             Transform nearestSleepDestination = null;
 
-            if (npc.context.Destinations[DestinationType.sleep] != null)
+            if (npc.context.Destinations[DestinationType.sleep].Count > 0)
             {
                 List<Transform> sleepDestinations = npc.context.Destinations[DestinationType.sleep];
                 foreach (Transform sleepDestination in sleepDestinations)

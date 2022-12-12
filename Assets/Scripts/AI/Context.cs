@@ -11,8 +11,8 @@ namespace TL.Core
         
         public string storageTag = "storage";
         public string sleepTag = "sleep";
-        public string coffeePlantTag = "coffeePlant";
-        public float MinDistance = 5f;
+        //public string coffeePlantTag = "coffeePlant";
+        public float MinDistance = 20f;
         public Dictionary<DestinationType, List<Transform>> Destinations { get; private set; }
 
         void Start()
@@ -26,14 +26,17 @@ namespace TL.Core
         {
             List<Transform> sleepDestinations = GetAllBeds();
             List<Transform> storageDestinations = GetAllStorage();
-            List<Transform> coffeePlantDestinations = GetAllCoffeePlants();
+            //List<Transform> coffeePlantDestinations = GetAllCoffeePlants();
+            List<Transform> workObjectDestinations = GetAllWorkObjects();
 
-            Destinations.Clear();
+            if (Destinations.Count > 0)
+            {
+                Destinations.Clear();
+            }
             Destinations.Add(DestinationType.sleep, sleepDestinations);
             Destinations.Add(DestinationType.storage, storageDestinations);
-            Destinations.Add(DestinationType.coffeePlant, coffeePlantDestinations);
-
-            actionManager.RefreshActions();
+            //Destinations.Add(DestinationType.coffeePlant, coffeePlantDestinations);
+            Destinations.Add(DestinationType.workObject, workObjectDestinations);
         }
         public Transform GetClosestSleepDestination(NPCController npc)
         {
@@ -66,19 +69,30 @@ namespace TL.Core
             return storage;
         }
 
-        private List<Transform> GetAllCoffeePlants()
+        private List<Transform> GetAllWorkObjects()
         {
-            Transform[] gameObjects = FindObjectsOfType<Transform>() as Transform[];
-            List<Transform> coffeePlants = new List<Transform>();
-            foreach (Transform go in gameObjects)
+            WorkObject[] workObjects = FindObjectsOfType<WorkObject>();
+            List<Transform> workObjectTransforms = new List<Transform>();
+            foreach(WorkObject workObject in workObjects)
             {
-                if (go.gameObject.tag == coffeePlantTag)
-                {
-                    coffeePlants.Add(go);
-                }
+                workObjectTransforms.Add(workObject.transform);
             }
-            return coffeePlants;
+            return workObjectTransforms;
         }
+
+        //private List<Transform> GetAllCoffeePlants()
+        //{
+        //    Transform[] gameObjects = FindObjectsOfType<Transform>() as Transform[];
+        //    List<Transform> coffeePlants = new List<Transform>();
+        //    foreach (Transform go in gameObjects)
+        //    {
+        //        if (go.gameObject.tag == coffeePlantTag)
+        //        {
+        //            coffeePlants.Add(go);
+        //        }
+        //    }
+        //    return coffeePlants;
+        //}
 
         private List<Transform> GetAllBeds()
         {

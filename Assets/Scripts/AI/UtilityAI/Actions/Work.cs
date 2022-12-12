@@ -30,35 +30,37 @@ namespace TL.UtilityAI.Actions
         {
 
             //if work is available find a destination
-            if (npc.context.Destinations[DestinationType.coffeePlant] != null)
+            if (npc.context.Destinations.ContainsKey(DestinationType.workObject))
             {
-
-                float distance = Mathf.Infinity;
-                Transform nearestCoffeePlant = null;
-
-                List<Transform> coffeePlants = npc.context.Destinations[DestinationType.coffeePlant];
-                foreach (Transform coffeePlant in coffeePlants)
+                if (npc.context.Destinations[DestinationType.workObject].Count > 0)
                 {
-                    if (coffeePlant.gameObject.GetComponent<CoffeePlant>().isWorkAvailable)
-                    {
+                    float distance = Mathf.Infinity;
+                    Transform nearestWorkObject = null;
 
-                        float distanceFromResource = Vector3.Distance(coffeePlant.position, npc.transform.position);
-                        if (distanceFromResource < distance)
+                    List<Transform> workObjects = npc.context.Destinations[DestinationType.workObject];
+                    foreach (Transform workObject in workObjects)
+                    {
+                        if (workObject.gameObject.GetComponent<WorkObject>().isWorkAvailable)
                         {
-                            nearestCoffeePlant = coffeePlant;
-                            distance = distanceFromResource;
+
+                            float distanceFromResource = Vector3.Distance(workObject.position, npc.transform.position);
+                            if (distanceFromResource < distance)
+                            {
+                                nearestWorkObject = workObject;
+                                distance = distanceFromResource;
+                            }
                         }
                     }
-                }
-                if (nearestCoffeePlant != null)
-                {
-                    RequiredDestination = nearestCoffeePlant;
-                    npc.mover.destination = RequiredDestination;
-                }
-                else
-                {
-                    RequiredDestination = null;
-                    npc.mover.destination = npc.transform;
+                    if (nearestWorkObject != null)
+                    {
+                        RequiredDestination = nearestWorkObject;
+                        npc.mover.destination = RequiredDestination;
+                    }
+                    else
+                    {
+                        RequiredDestination = null;
+                        npc.mover.destination = npc.transform;
+                    }
                 }
             }
             else

@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Inventory : MonoBehaviour
 {
-    public Dictionary<CoffeeTypeSO, int> inventory { get; set; }
+    [SerializeField] public Dictionary<CoffeeTypeSO, int> inventory { get; set; }
     public int maxCapacity { get; set; }
 
     public void InitialiseInventory()

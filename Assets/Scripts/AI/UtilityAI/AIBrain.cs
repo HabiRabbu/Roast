@@ -15,10 +15,12 @@ namespace TL.UtilityAI
 
         //[SerializeField] public Action[] actionsAvailable;
         public List<Action> actionsAvailable;
+        public ActionManager actionManager;
 
         // Start is called before the first frame update
         void Start()
         {
+            actionManager = GameObject.Find("ActionManager").GetComponent<ActionManager>();
             npc = GetComponent<NPCController>();
             finishedDeciding = false;
             finishedExecutingBestAction = false;
@@ -33,7 +35,10 @@ namespace TL.UtilityAI
         // Loop through available actions -> Give the highest scoring action
         public void DecideBestAction()
         {
+            //Optimisation idea - Only actions available need their destinations refreshed.
             npc.context.RefreshDestinations();
+            actionManager.FindAvailableActions();
+            actionsAvailable = actionManager.actionsAvailable;
             if (actionsAvailable.Count >= 1)
             {
                 finishedExecutingBestAction = false;

@@ -24,11 +24,26 @@ public class NPCInventory : Inventory
         if (amountInInventory + amount > maxCapacity)
         {
             int amountCanAdd = maxCapacity - amountInInventory;
-            inventory[c] += amountCanAdd;
+
+            if (!inventory.ContainsKey(c))
+            {
+                inventory.Add(c, amountCanAdd);
+            }
+            else
+            {
+                inventory[c] += amountCanAdd;
+            }
         }
         else
         {
-            inventory[c] += amount;
+            if (!inventory.ContainsKey(c))
+            {
+                inventory.Add(c, amount);
+            }
+            else
+            {
+                inventory[c] += amount;
+            }
         }
     }
 

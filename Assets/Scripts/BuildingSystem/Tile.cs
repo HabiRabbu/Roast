@@ -15,6 +15,8 @@ public class Tile : MonoBehaviour
     TextMeshPro label;
     GridManager gridManager;
 
+    private bool isShowing;
+
     void Awake()
     {
         this.label = transform.GetChild(0).GetComponent<TextMeshPro>();
@@ -23,6 +25,17 @@ public class Tile : MonoBehaviour
     private void Start()
     {
         showCoords();
+        isShowing = false;
+        label.gameObject.SetActive(isShowing);
+    }
+
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.BackQuote))
+        {
+            isShowing = !isShowing;
+            label.gameObject.SetActive(isShowing);
+        }
     }
 
     public void SetPlacedObject(PlacedObject placedObject)
@@ -59,7 +72,10 @@ public class Tile : MonoBehaviour
     private void OnMouseDown()
     {
         Tile tile = GameObject.Find("GridManager").GetComponent<GridManager>().GetTileAtPosition(new Vector3(xCoord, 0, zCoord));
-        Debug.Log(tile.xLabel + ", " + tile.zLabel);
+        if (isShowing)
+        {
+            Debug.Log(tile.xLabel + ", " + tile.zLabel);
+        }
     }
 
     public void setCoords(Vector2 labelcoords, Vector2 coords)

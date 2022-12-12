@@ -8,7 +8,8 @@ namespace TL.Core
     {
         sleep,
         coffeePlant,
-        storage
+        storage,
+        workObject
     }
 
 }

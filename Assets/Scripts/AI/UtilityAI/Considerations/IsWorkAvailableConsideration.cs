@@ -12,7 +12,7 @@ namespace TL.UtilityAI.Considerations
     {
         public override float ScoreConsideration(NPCController npc)
         {
-            if (GameObject.Find("ActionManager").GetComponent<ActionManager>().isWorkAvailable)
+            if (GameObject.Find("ActionManager").GetComponent<ActionManager>().workTasksAvailable > 0)
             {
                 return 0f;
             }

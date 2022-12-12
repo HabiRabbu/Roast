@@ -12,7 +12,7 @@ public enum GrowthState
     harvestable
 }
 
-public class CoffeePlant : MonoBehaviour
+public class CoffeePlant : WorkObject
 {
 
     [SerializeField] private CoffeeTypeSO coffeeTypeSO;
@@ -25,9 +25,6 @@ public class CoffeePlant : MonoBehaviour
     private float timer;
 
     public int workAmountNeeded;
-    //To move to an InteractableBuilding or something class to be inherited from?
-    public bool isWorkAvailable;
-    public int workPerTask = 10;
 
     public GrowthState currentGrowthState { get; set; }
     // Start is called before the first frame update

@@ -8,97 +8,111 @@ namespace TL.UtilityAI
 
     public class ActionManager : MonoBehaviour
     {
-        public AIBrain aiBrain;
         public WorldTimeManager worldTimeManager;
+        public List<Action> actionsAvailable;
+        public Context context;
 
         public Action work;
         public Action sleep;
         public Action dropOff;
 
-        public Context context;
-
-        public bool isWorkAvailable { get; set; }
         public int workTasksAvailable;
 
-        private bool workAdded;
         void Start()
         {
             context = GameObject.Find("Context").GetComponent<Context>();
             workTasksAvailable = 0;
-            isWorkAvailable = false;
-            workAdded = false;
-            RefreshActions();
         }
 
         // Update is called once per frame
         void Update()
         {
-            IsWorkAvailable();
-            RefreshIfWorkAvailable();
+            
         }
 
-        private void RefreshIfWorkAvailable()
+        public void FindAvailableActions()
         {
-            if (isWorkAvailable)
-            {
-                if (!workAdded)
-                {
-                    RefreshActions();
-                    workAdded = true;
-                }
-            }
+            AddRemoveWork();
+            AddRemoveSleep();
 
-            if (!isWorkAvailable)
-            {
-                if (workAdded)
-                {
-                    RefreshActions();
-                    workAdded = false;
-                }
-            }
+            //Something else
         }
 
-        private void IsWorkAvailable()
+        private void AddRemoveWork()
         {
+            //WORK
+            //Add work action if workTasksAvailable
             if (workTasksAvailable > 0)
             {
-                isWorkAvailable = true;
+                bool workAdded = false;
+                foreach (Action action in actionsAvailable)
+                {
+                    if (action.Name == work.Name)
+                    {
+                        workAdded = true;
+                    }
+                }
+                if (workAdded == false)
+                {
+                    actionsAvailable.Add(work);
+                    Debug.Log("Work action added!");
+                }
             }
+            //Remove work action if !workTasksAvailable
             else
             {
-                isWorkAvailable = false;
+                foreach (Action action in actionsAvailable)
+                {
+                    if (action.Name == work.Name)
+                    {
+                        actionsAvailable.Remove(action);
+                        Debug.Log("Work action removed!");
+                    }
+                }
             }
+        }
+
+        private void AddRemoveSleep()
+        {
+            //SLEEP
+            //Add if sleep locations is available
+            if (context.Destinations.ContainsKey(DestinationType.sleep))
+            {
+                if(context.Destinations[DestinationType.sleep].Count > 0)
+                {
+                    bool sleepAdded = false;
+                    foreach (Action action in actionsAvailable)
+                    {
+                        if (action.Name == sleep.Name)
+                        {
+                            sleepAdded = true;
+                        }
+                    }
+                    if (sleepAdded == false)
+                    {
+                        actionsAvailable.Add(sleep);
+                        Debug.Log("Sleep action added!");
+                    }
+                }
+                else
+                {
+                    foreach (Action action in actionsAvailable)
+                    {
+                        if (action.Name == sleep.Name)
+                        {
+                            actionsAvailable.Remove(action);
+                            Debug.Log("Sleep action removed!");
+                        }
+                    }
+                }
+            }
+
+            //Remove if no sleep locations are available
         }
 
         public void AddWorkTask(int amount)
         {
             workTasksAvailable += amount;
-        }
-
-        //Adding work every time it's refreshed - multiples?
-        public void RefreshActions()
-        {
-            if (isWorkAvailable)
-            {
-                aiBrain.actionsAvailable.Add(work);
-            }
-            else
-            {
-                foreach (Action action in aiBrain.actionsAvailable)
-                {
-                    if (action.Name == work.Name)
-                    {
-                        Debug.Log("Found Work...");
-                        aiBrain.actionsAvailable.Remove(action);
-                    }
-                }
-            }
-
-
-            //Add sleep action or remove
-
-
-
         }
     }
 }

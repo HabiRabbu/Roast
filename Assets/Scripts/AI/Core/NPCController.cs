@@ -79,7 +79,7 @@ namespace TL.Core
                         {
                             currentState = State.move;
                         }
-                    } 
+                    }
             }
             else if (currentState == State.move)
             {
