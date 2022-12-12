@@ -1,11 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TL.UtilityAI;
 
 namespace TL.Core
 {
     public class Context : MonoBehaviour
     {
+        public ActionManager actionManager;
+        
         public string storageTag = "storage";
         public string sleepTag = "sleep";
         public string coffeePlantTag = "coffeePlant";
@@ -14,6 +17,7 @@ namespace TL.Core
 
         void Start()
         {
+            actionManager = GameObject.Find("ActionManager").GetComponent<ActionManager>();
             Destinations = new Dictionary<DestinationType, List<Transform>>();
             RefreshDestinations();
         }
@@ -28,7 +32,8 @@ namespace TL.Core
             Destinations.Add(DestinationType.sleep, sleepDestinations);
             Destinations.Add(DestinationType.storage, storageDestinations);
             Destinations.Add(DestinationType.coffeePlant, coffeePlantDestinations);
-            
+
+            actionManager.RefreshActions();
         }
         public Transform GetClosestSleepDestination(NPCController npc)
         {

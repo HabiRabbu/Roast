@@ -13,7 +13,8 @@ namespace TL.UtilityAI
         public Action bestAction { get; set; }
         private NPCController npc;
 
-        [SerializeField] public Action[] actionsAvailable;
+        //[SerializeField] public Action[] actionsAvailable;
+        public List<Action> actionsAvailable;
 
         // Start is called before the first frame update
         void Start()
@@ -26,32 +27,33 @@ namespace TL.UtilityAI
         // Update is called once per frame
         void Update()
         {
-            //if (bestAction is null)
-            //{
-            //    DecideBestAction(npc.actionsAvailable);
-            //}
+            
         }
 
         // Loop through available actions -> Give the highest scoring action
         public void DecideBestAction()
         {
-            finishedExecutingBestAction = false;
-
-            float score = 0f;
-            int nextBestActionIndex = 0;
-            for (int i = 0; i < actionsAvailable.Length; i++)
+            npc.context.RefreshDestinations();
+            if (actionsAvailable.Count >= 1)
             {
-                if (ScoreAction(actionsAvailable[i]) > score)
+                finishedExecutingBestAction = false;
+
+                float score = 0f;
+                int nextBestActionIndex = 0;
+                for (int i = 0; i < actionsAvailable.Count; i++)
                 {
-                    nextBestActionIndex = i;
-                    score = actionsAvailable[i].score;
+                    if (ScoreAction(actionsAvailable[i]) > score)
+                    {
+                        nextBestActionIndex = i;
+                        score = actionsAvailable[i].score;
+                    }
                 }
+
+                bestAction = actionsAvailable[nextBestActionIndex];
+                bestAction.SetRequiredDestination(npc);
+
+                finishedDeciding = true;
             }
-
-            bestAction = actionsAvailable[nextBestActionIndex];
-            bestAction.SetRequiredDestination(npc);
-
-            finishedDeciding = true;
         }
 
         // Loop through all considerations of the action -> Score all considerations -> Average the considerations -> Overall action score

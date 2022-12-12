@@ -15,13 +15,23 @@ namespace TL.Core
 
     public class NPCController : MonoBehaviour
     {
+        public ActionManager actionManager;
         public MoveController mover { get; set; }
         public AIBrain aiBrain { get; set; }
         public NPCInventory inventory { get; set; }
         public StaffStats stats { get; set; }
 
         public Context context;
-        
+
+        public CoffeePlant coffeePlant;
+
+        public float minDistanceFromTarget;
+        public float timePerOneWorkInSeconds;
+
+        public Coroutine working;
+        public Coroutine sleeping;
+        public Coroutine idling;
+
 
         public State currentState { get; set; }
 
@@ -32,6 +42,10 @@ namespace TL.Core
             aiBrain = GetComponent<AIBrain>();
             inventory = GetComponent<NPCInventory>();
             stats = GetComponent<StaffStats>();
+
+            working = null;
+            sleeping = null;
+            idling = null;
         }
 
         // Update is called once per frame
@@ -53,20 +67,23 @@ namespace TL.Core
         {
             if (currentState == State.decide)
             {
-                aiBrain.DecideBestAction();
+                    aiBrain.DecideBestAction();
 
-                if(Vector3.Distance(aiBrain.bestAction.RequiredDestination.position, this.transform.position) < 20f)
-                {
-                    currentState = State.execute;
-                }
-                else
-                {
-                    currentState = State.move;
-                }
+                    if (aiBrain.bestAction.RequiredDestination != null)
+                    {
+                        if (Vector3.Distance(aiBrain.bestAction.RequiredDestination.position, this.transform.position) < minDistanceFromTarget)
+                        {
+                            currentState = State.execute;
+                        }
+                        else
+                        {
+                            currentState = State.move;
+                        }
+                    } 
             }
             else if (currentState == State.move)
             {
-                if (Vector3.Distance(aiBrain.bestAction.RequiredDestination.position, this.transform.position) < 20f)
+                if (Vector3.Distance(aiBrain.bestAction.RequiredDestination.position, this.transform.position) < minDistanceFromTarget)
                 {
                     currentState = State.execute;
                 }
@@ -110,33 +127,52 @@ namespace TL.Core
 
         #region Coroutine
 
-        public void DoWork(int time)
+        public void DoWork()
         {
-            StartCoroutine(WorkCoroutine(time));
+            if (working == null)
+            {
+                working = StartCoroutine(WorkCoroutine(timePerOneWorkInSeconds));
+            }
         }
 
         public void DoSleep(int time)
         {
-            StartCoroutine(SleepCoroutine(time));
+            if (sleeping == null)
+            {
+                sleeping = StartCoroutine(SleepCoroutine(time));
+            }
         }
 
-        IEnumerator WorkCoroutine(int time)
+        public void DoIdle()
         {
-            int counter = time;
-            while (counter > 0)
+            if (idling == null)
             {
-                yield return new WaitForSeconds(1);
-                counter--;
+                idling = StartCoroutine(IdleCoroutine());
             }
+        }
 
-            Debug.Log("I AM WORKING.");
+        IEnumerator IdleCoroutine()
+        {
+            Debug.Log("I have nothing to do.");
+
+            yield return new WaitForSeconds(5);
+
+            aiBrain.finishedExecutingBestAction = true;
+            idling = null;
+        }
+
+        IEnumerator WorkCoroutine(float time)
+        {
+                
+            yield return new WaitForSeconds(time);
+ 
+
             //TODO: Add logic for farming/working etc
-            //Add to Inventory
-            Debug.Log("TODO: Add to inventory here");
+            aiBrain.bestAction.RequiredDestination.gameObject.GetComponent<CoffeePlant>().WorkAction(this);
 
             //Decide new action after this action
-            //OnFinishedAction();
             aiBrain.finishedExecutingBestAction = true;
+            working = null;
         }
 
         IEnumerator SleepCoroutine(int time)
@@ -155,6 +191,7 @@ namespace TL.Core
             //Decide new action after this action
             //OnFinishedAction();
             aiBrain.finishedExecutingBestAction = true;
+            sleeping = null;
         }
 
         #endregion

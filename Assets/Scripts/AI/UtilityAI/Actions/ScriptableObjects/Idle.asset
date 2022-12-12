@@ -9,11 +9,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d515b1cf464c5df43a0d4d424392d55d, type: 3}
-  m_Name: Work
+  m_Script: {fileID: 11500000, guid: 5fa25e7b0bf5d8642b98e70e58826e39, type: 3}
+  m_Name: Idle
   m_EditorClassIdentifier: 
-  Name: Work
+  Name: Idle
   _score: 0
   considerations:
-  - {fileID: 11400000, guid: 3a14e6e9c781755459e90e753dbdd29a, type: 2}
-  timePerOneWorkInSeconds: 10
+  - {fileID: 11400000, guid: f25d0c4ffbb03db439b8445c94210b5d, type: 2}

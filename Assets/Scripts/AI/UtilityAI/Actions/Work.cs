@@ -10,31 +10,62 @@ namespace TL.UtilityAI.Actions
     [CreateAssetMenu(fileName = "Work", menuName = "UtilityAI/Actions/Work")]
     public class Work : Action
     {
+
         public override void Execute(NPCController npc)
         {
-            npc.DoWork(3);
+            //if work is available, do work
+            if (RequiredDestination != null)
+            {
+                npc.DoWork();
+            }
+            //else
+            else
+            {
+                npc.DoIdle();
+            }
+                //npc.DoIdle(5)
         }
 
         public override void SetRequiredDestination(NPCController npc)
         {
-            npc.context.RefreshDestinations();
 
-            float distance = Mathf.Infinity;
-            Transform nearestCoffeePlant = null;
-
-            List<Transform> coffeePlants = npc.context.Destinations[DestinationType.coffeePlant];
-            foreach(Transform coffeePlant in coffeePlants)
+            //if work is available find a destination
+            if (npc.context.Destinations[DestinationType.coffeePlant] != null)
             {
-                float distanceFromResource = Vector3.Distance(coffeePlant.position, npc.transform.position);
-                if (distanceFromResource < distance)
+
+                float distance = Mathf.Infinity;
+                Transform nearestCoffeePlant = null;
+
+                List<Transform> coffeePlants = npc.context.Destinations[DestinationType.coffeePlant];
+                foreach (Transform coffeePlant in coffeePlants)
                 {
-                    nearestCoffeePlant = coffeePlant;
-                    distance = distanceFromResource;
+                    if (coffeePlant.gameObject.GetComponent<CoffeePlant>().isWorkAvailable)
+                    {
+
+                        float distanceFromResource = Vector3.Distance(coffeePlant.position, npc.transform.position);
+                        if (distanceFromResource < distance)
+                        {
+                            nearestCoffeePlant = coffeePlant;
+                            distance = distanceFromResource;
+                        }
+                    }
+                }
+                if (nearestCoffeePlant != null)
+                {
+                    RequiredDestination = nearestCoffeePlant;
+                    npc.mover.destination = RequiredDestination;
+                }
+                else
+                {
+                    RequiredDestination = null;
+                    npc.mover.destination = npc.transform;
                 }
             }
-
-            RequiredDestination = nearestCoffeePlant;
-            npc.mover.destination = RequiredDestination;
+            else
+            {
+                RequiredDestination = null;
+                npc.mover.destination = npc.transform;
+            }
         }
 
     }

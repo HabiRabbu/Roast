@@ -12,29 +12,40 @@ namespace TL.UtilityAI.Actions
     {
         public override void Execute(NPCController npc)
         {
-            npc.DoSleep(3);
+            if (npc.context.Destinations[DestinationType.sleep] != null)
+            {
+                npc.DoSleep(3);
+            }
         }
 
         public override void SetRequiredDestination(NPCController npc)
         {
-            npc.context.RefreshDestinations();
+            //npc.context.RefreshDestinations();
 
             float distance = Mathf.Infinity;
             Transform nearestSleepDestination = null;
 
-            List<Transform> sleepDestinations = npc.context.Destinations[DestinationType.sleep];
-            foreach (Transform sleepDestination in sleepDestinations)
+            if (npc.context.Destinations[DestinationType.sleep] != null)
             {
-                float distanceFromSleep = Vector3.Distance(sleepDestination.position, npc.transform.position);
-                if (distanceFromSleep < distance)
+                List<Transform> sleepDestinations = npc.context.Destinations[DestinationType.sleep];
+                foreach (Transform sleepDestination in sleepDestinations)
                 {
-                    nearestSleepDestination = sleepDestination;
-                    distance = distanceFromSleep;
+                    float distanceFromSleep = Vector3.Distance(sleepDestination.position, npc.transform.position);
+                    if (distanceFromSleep < distance)
+                    {
+                        nearestSleepDestination = sleepDestination;
+                        distance = distanceFromSleep;
+                    }
                 }
-            }
 
-            RequiredDestination = nearestSleepDestination;
-            npc.mover.destination = RequiredDestination;
+                RequiredDestination = nearestSleepDestination;
+                npc.mover.destination = RequiredDestination;
+            }
+            else
+            {
+                npc.mover.destination = npc.transform;
+            }
+            
         }
     }
 }

@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 251cb871e4c31e6488d2216f97290a02, type: 3}
   m_Name: HowFullIsMyInventory
   m_EditorClassIdentifier: 
-  Name: 
+  Name: HowFullIsMyInventory
   responseCurve:
     serializedVersion: 2
     m_Curve:
