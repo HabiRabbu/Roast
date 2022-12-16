@@ -18,7 +18,10 @@ Key Mechanics:
 
 
 ## Version History
-
+* 0.2.2
+    * Action Manager Added
+    * Optimised available actions
+    * Fixed Work availability + Coffee plant FSM
 * 0.2
     * Initial Release
     * CineMachine Camera System - Mouse Pan, Rotate, FOV Zoom, Keyboard Pan
@@ -30,3 +33,4 @@ Key Mechanics:
     * Staff NPC + Stats class added
     * Implementation of Utility AI + Actions and Considerations SOs
     * Animation Curve weighting for Considerations added
+    * 160 hours development time reached
