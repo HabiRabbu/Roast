@@ -18,6 +18,10 @@ Key Mechanics:
 
 
 ## Version History
+* 0.3
+    * Utility AI - Reworked "Work" action to allow for better control and work ratio.
+    * Added core product and design scripts + Reworked some existing class inheritance
+    * Created Prototype Coffee Product and Design system / flow with related UI elements.
 * 0.2.2
     * Action Manager Added
     * Optimised available actions
