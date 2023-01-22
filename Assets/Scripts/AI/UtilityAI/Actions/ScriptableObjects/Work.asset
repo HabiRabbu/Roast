@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Work
   m_EditorClassIdentifier: 
   Name: Work
-  _score: 0
+  _score: 0.9876543
   considerations:
-  - {fileID: 11400000, guid: 3a14e6e9c781755459e90e753dbdd29a, type: 2}
-  timePerOneWorkInSeconds: 10
+  - {fileID: 11400000, guid: 2b4894613e3347246bb99d5d4e83bc13, type: 2}
+  - {fileID: 11400000, guid: 7c2161bb5770b1e4f92a0ed5b449e6cc, type: 2}

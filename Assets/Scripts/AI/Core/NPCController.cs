@@ -195,5 +195,10 @@ namespace TL.Core
         }
 
         #endregion
+
+        private void OnMouseDown()
+        {
+            GameObject.Find("UIManager").GetComponent<UIManager>().ToggleStaffInfoPopup(this.gameObject);
+        }
     }
 }

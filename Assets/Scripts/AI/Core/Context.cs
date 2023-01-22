@@ -15,6 +15,8 @@ namespace TL.Core
         public float MinDistance = 20f;
         public Dictionary<DestinationType, List<Transform>> Destinations { get; private set; }
 
+        public int totalWorkPossible;
+
         void Start()
         {
             actionManager = GameObject.Find("ActionManager").GetComponent<ActionManager>();
@@ -28,6 +30,8 @@ namespace TL.Core
             List<Transform> storageDestinations = GetAllStorage();
             //List<Transform> coffeePlantDestinations = GetAllCoffeePlants();
             List<Transform> workObjectDestinations = GetAllWorkObjects();
+
+            totalWorkPossible = workObjectDestinations.Count;
 
             if (Destinations.Count > 0)
             {

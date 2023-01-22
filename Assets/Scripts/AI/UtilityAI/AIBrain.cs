@@ -69,7 +69,6 @@ namespace TL.UtilityAI
             {
                 float considerationScore = action.considerations[i].ScoreConsideration(npc);
                 score *= considerationScore;
-
                 if (score == 0)
                 {
                     action.score = 0;
