@@ -21,6 +21,16 @@ Key Mechanics:
 
 
 ## Version History
+* 0.5
+  * New Assets + Buildables
+  * Main Menu Screen Added
+  * Options Menu added
+  * Final rework to Utility AI - Available Jobs Class + Context Class
+  * Coffee Creation and Product system added + Required Inheritance
+  * Prototype Contract system added
+  * AI Optimisation
+  * New UI Assets
+  * Post Processing
 * 0.3
     * Utility AI - Reworked "Work" action to allow for better control and work ratio.
     * Added core product and design scripts + Reworked some existing class inheritance
