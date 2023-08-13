@@ -2,9 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CoffeeProduct : MonoBehaviour
+public class CoffeeProduct : MonoBehaviour 
 {
-    public string Name { get; set; }
+    public string nameString { get; set; }
     public CoffeeTypeSO coffeeType;
     public float Quality { get; set; }
     //public float Complexity { get; set; }

@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d1869fcdf365f3d41bf413f0a3aeae84, type: 3}
+  m_Name: StorageCrate 1
+  m_EditorClassIdentifier: 
+  nameString: Storage Crate
+  prefab: {fileID: 4695132995424214916, guid: 0ecb7f11ca3d39243b3b12179430dc55, type: 3}
+  visual: {fileID: 4695132995424214916, guid: 33748dfce98cded49b0097af77acaafc, type: 3}
+  xWidth: 1
+  zWidth: 1

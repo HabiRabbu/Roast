@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class CoffeeDesign : MonoBehaviour
 {
-    public string Name { get; set; }
+    public string nameString { get; set; }
     public CoffeeProduct Product { get; set; }
 
     // Start is called before the first frame update

@@ -13,16 +13,22 @@ public class CoffeeDesignPopup : MonoBehaviour
     private CoffeeDesignManager coffeeDesignManager;
     public GameObject viewDesigns;
     public GameObject createDesigns;
+
+    public List<GameObject> tabButtons;
+
+    List<GameObject> tabs = new List<GameObject>();
     public GameObject tab1;
     public GameObject tab2;
     public GameObject tab3;
     public GameObject tab4;
     public GameObject tab5;
+    public bool isTab1Setup, isTab2Setup, isTab3Setup, isTab4Setup, isTab5Setup = false;
 
     #region Product Creation
     public string productType;
     public string designName;
-    public CoffeeTypeSO coffeeType;
+    public CoffeeTypeSO selectedCoffeeType = null;
+    Dictionary<string, GameObject> productTypeBTNs = new Dictionary<string, GameObject>();
     #endregion
 
     private enum TabState
@@ -39,6 +45,20 @@ public class CoffeeDesignPopup : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        //Add Selection Buttons to Dictionary
+        productTypeBTNs.Add("Bean", GameObject.Find("BTN_Bean"));
+        productTypeBTNs.Add("Dried", GameObject.Find("BTN_Dried"));
+        productTypeBTNs.Add("Roasted", GameObject.Find("BTN_Roasted"));
+        productTypeBTNs.Add("Ground", GameObject.Find("BTN_Ground"));
+        productTypeBTNs.Add("Other", GameObject.Find("BTN_Other"));
+
+        //Add tabs to list
+        tabs.Add(tab1);
+        tabs.Add(tab2);
+        tabs.Add(tab3);
+        tabs.Add(tab4);
+        tabs.Add(tab5);
+
         coffeeDesignManager = GameObject.Find("CoffeeDesignManager").GetComponent<CoffeeDesignManager>();
         //viewDesigns = GameObject.Find("ViewDesigns");
         //createDesigns = GameObject.Find("CreateDesigns");
@@ -78,23 +98,40 @@ public class CoffeeDesignPopup : MonoBehaviour
                 productType = "Other";
                 break;
         }
+
+        foreach (var item in productTypeBTNs)
+        {
+            if (productType == item.Key)
+            {
+                item.Value.GetComponent<Image>().color = Color.black;
+            }
+            else
+            {
+                item.Value.GetComponent<Image>().color = Color.white;
+            }
+        }
     }
 
+    //Accessed by final button - Takes all tabs info and creates a design.
     public void CreateDesign()
     {
-        //TODO: Find and set all local properties from selections, drop downs, inputs, etc  (designName, coffeeType, etc)
-
+        //TODO: Find and set all local properties from selections, drop downs, inputs, etc  (designName, selectedCoffeeType, etc)
+        designName = GameObject.Find("NameInput").GetComponent<TMP_InputField>().text;
 
         if (productType == "Bean")
         {
-            CoffeeDesign beanDesign = coffeeDesignManager.CreateBean(designName, coffeeType);
-
-            print("Adding: " + beanDesign);
-            coffeeDesignManager.AddCoffeeDesign(beanDesign);
+            if (designName.Length > 0 && selectedCoffeeType != null)
+            {
+                coffeeDesignManager.CreateBean(designName, selectedCoffeeType);
+            }
+            else
+            {
+                print("Bean design missing name or selected coffee type.");
+            }
         }
         //if (productType == "Dried")
         //{
-        //    CoffeeDesign beanDesign = coffeeDesignManager.CreateBean(designName, coffeeType);
+        //    CoffeeDesign beanDesign = coffeeDesignManager.CreateBean(designName, selectedCoffeeType);
         //    CoffeeDesign driedDesign = coffeeDesignManager.CreateDried(beanDesign);
 
         //    coffeeDesignManager.AddCoffeeDesign(driedDesign);
@@ -107,51 +144,47 @@ public class CoffeeDesignPopup : MonoBehaviour
     #region visuals
     public void ShowTab()
     {
+        foreach(GameObject tab in tabs)
+        {
+            tab.SetActive(false);
+        }
+        foreach(GameObject tabButton in tabButtons)
+        {
+            tabButton.GetComponent<Outline>().enabled = false;
+        }
         switch (currentTab)
         {
             case TabState.Tab1:
                 tab1.SetActive(true);
-                tab2.SetActive(false);
-                tab3.SetActive(false);
-                tab4.SetActive(false);
-                tab5.SetActive(false);
-
-                GameObject beanContent = GameObject.Find("CoffeeBeanContent");
-                foreach (CoffeeTypeSO coffeeType in coffeeDesignManager.coffeeTypes)
+                tabButtons[0].GetComponent<Outline>().enabled = true;
+                if (!isTab1Setup)
                 {
-                    GameObject coffeeTypeButton = Instantiate(coffeeTypeButtonPrefab, beanContent.transform);
-                    //TODO: Set image
-                    coffeeTypeButton.transform.Find("TXT_Name").GetComponent<TMP_Text>().SetText(coffeeType.nameString);
+                    GameObject beanContent = GameObject.Find("CoffeeBeanContent");
+                    foreach (CoffeeTypeSO coffeeTypes in coffeeDesignManager.coffeeTypes)
+                    {
+                        GameObject coffeeTypeButton = Instantiate(coffeeTypeButtonPrefab, beanContent.transform);
+                        coffeeTypeButton.GetComponent<SetBTNCoffeeType>().coffeeType = coffeeTypes;
+                        //TODO: Set image
+                        coffeeTypeButton.transform.Find("TXT_Name").GetComponent<TMP_Text>().SetText(coffeeTypes.nameString);
+                    }
+                    isTab1Setup = true;
                 }
-
                 break;
             case TabState.Tab2:
-                tab1.SetActive(false);
                 tab2.SetActive(true);
-                tab3.SetActive(false);
-                tab4.SetActive(false);
-                tab5.SetActive(false);
+                tabButtons[1].GetComponent<Outline>().enabled = true;
                 break;
             case TabState.Tab3:
-                tab1.SetActive(false);
-                tab2.SetActive(false);
                 tab3.SetActive(true);
-                tab4.SetActive(false);
-                tab5.SetActive(false);
+                tabButtons[2].GetComponent<Outline>().enabled = true;
                 break;
             case TabState.Tab4:
-                tab1.SetActive(false);
-                tab2.SetActive(false);
-                tab3.SetActive(false);
                 tab4.SetActive(true);
-                tab5.SetActive(false);
+                tabButtons[3].GetComponent<Outline>().enabled = true;
                 break;
             case TabState.Tab5:
-                tab1.SetActive(false);
-                tab2.SetActive(false);
-                tab3.SetActive(false);
-                tab4.SetActive(false);
                 tab5.SetActive(true);
+                tabButtons[4].GetComponent<Outline>().enabled = true;
                 break;
         }
     }
@@ -192,13 +225,17 @@ public class CoffeeDesignPopup : MonoBehaviour
         createDesigns.SetActive(false);
 
         Transform designContent = viewDesigns.transform.Find("DesignContent");
+        foreach (Transform child in designContent)
+        {
+            Destroy(child.gameObject);
+        }
         foreach (CoffeeDesign coffeeDesign in coffeeDesignManager.coffeeDesigns)
         {
             GameObject coffeeDesignButton = Instantiate(coffeeDesignButtonPrefab, designContent);
             //Show name of design
-            coffeeDesignButton.transform.Find("TXT_Name").GetComponent<TMP_Text>().SetText(coffeeDesign.Name);
+            coffeeDesignButton.transform.Find("TXT_Name").GetComponent<TMP_Text>().SetText(coffeeDesign.nameString);
             //Show name of type of product (e.g. Ground Coffee Beans)
-            coffeeDesignButton.transform.Find("TXT_CoffeeProduct").GetComponent<TMP_Text>().SetText(coffeeDesign.Product.Name);
+            coffeeDesignButton.transform.Find("TXT_CoffeeProduct").GetComponent<TMP_Text>().SetText(coffeeDesign.Product.nameString);
         }
     }
     #endregion

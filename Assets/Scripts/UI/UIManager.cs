@@ -168,7 +168,7 @@ public class UIManager : MonoBehaviour
         if (isStaffInfoPopupOpen)
         {
             StaffStats staffStats = selectedStaff.GetComponent<StaffStats>();
-            staffInfoPopup.transform.GetChild(0).GetComponent<TMP_Text>().text = staffStats.staffName;//Name
+            staffInfoPopup.transform.GetChild(0).GetComponent<TMP_Text>().text = staffStats.staffName;//nameString
                                                                                                       //Image
             staffInfoPopup.transform.GetChild(2).GetComponent<TMP_Text>().text = "Age: " + staffStats.age.ToString();//Age
             staffInfoPopup.transform.GetChild(3).GetComponent<TMP_Text>().text = "Level: " + staffStats.level.ToString();//Level
